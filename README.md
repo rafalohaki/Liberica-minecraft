@@ -1,3 +1,3 @@
 # Liberica-minecraft
 
-NICE
+https://hub.docker.com/r/rafalohaki/liberica-minecraft
