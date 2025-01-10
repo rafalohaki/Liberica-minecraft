@@ -1,17 +1,6 @@
-name: Docker Build, Push, and Sign
-
-on:
-  push:
-    branches: [ "main" ]
-    tags: [ 'v*.*.*' ]
-  pull_request:
-    branches: [ "main" ]
-  schedule:
-    - cron: '41 1 * * *'
-
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository_owner }}/${{ github.event.repo.name }} # More explicit image name
+  IMAGE_NAME: ${{ github.repository_owner }}/${{ github.event.repository.name }} # Use github.event.repository.name
 
 jobs:
   build:
@@ -38,7 +27,10 @@ jobs:
         id: meta
         uses: docker/metadata-action@96383f45573cb7f253c731d3b3ab81c87ef81934 # v5.0.0
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          images: |
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.ref_name }}
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha short_7 }}
 
       - name: Build and push Docker image
         id: build-and-push
@@ -50,28 +42,3 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-
-  sign:
-    needs: build
-    runs-on: ubuntu-latest
-    permissions:
-      id-token: write # Required for signing
-      packages: read # To verify the image exists before signing
-    if: github.event_name == 'push' || startsWith(github.ref, 'refs/tags/v')
-    steps:
-      - name: Download cosign
-        uses: sigstore/cosign-installer@59acb6260d9c0ba8f4a2f9d9b48431a222b68e20 #v3.5.0
-        with:
-          cosign-release: 'v2.2.4'
-
-      - name: Sign the published Docker image
-        env:
-          TAGS: ${{ steps.get_tags.outputs.tags }}
-          DIGEST: ${{ needs.build.outputs.digest }}
-        # This step uses the identity token to provision an ephemeral certificate
-        # against the sigstore community Fulcio instance.
-        run: echo "${{ needs.build.outputs.tags }}" | xargs -I {} cosign sign --yes {}@${{ needs.build.outputs.digest }}
-
-      - name: Get tags
-        id: get_tags
-        run: echo "tags=${{ needs.build.outputs.tags }}" >> $GITHUB_OUTPUT
