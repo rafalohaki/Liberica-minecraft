@@ -1,0 +1,25 @@
+name: Build Docker Images
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        tag: [8, 17, 21, 23]
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: Dockerfiles/Dockerfile${{ matrix.tag }}
+          push: false # Set to false to only build, change to true to push
+          tags: liberica-minecraft:${{ matrix.tag }}
