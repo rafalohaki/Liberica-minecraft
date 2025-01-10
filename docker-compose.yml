@@ -1,0 +1,24 @@
+#bellsoft/liberica-openjdk-debian:23
+#bellsoft/liberica-openjdk-alpine-musl:23 optimized but need a font
+#bellsoft/liberica-runtime-container:jre-23-musl optimized but need a font
+services:
+  liberica-runtime-8:
+    build:
+      context: . # Build context is the current directory
+      dockerfile: Dockerfiles/Dockerfile8 # Name of the dockerfile
+    image: liberica-runtime-8 # Sets the image name after build
+  liberica-runtime-17:
+    build:
+      context: . # Build context is the current directory
+      dockerfile: Dockerfiles/Dockerfile17 # Name of the dockerfile
+    image: liberica-runtime-17 # Sets the image name after build
+  liberica-runtime-21:
+    build:
+      context: . # Build context is the current directory
+      dockerfile: Dockerfiles/Dockerfile21 # Name of the dockerfile
+    image: liberica-runtime-21 # Sets the image name after build
+  liberica-runtime-23:
+    build:
+      context: . # Build context is the current directory
+      dockerfile: Dockerfiles/Dockerfile23 # Name of the dockerfile
+    image: liberica-runtime-23 # Sets the image name after build

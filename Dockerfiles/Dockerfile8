@@ -1,0 +1,4 @@
+FROM bellsoft/liberica-runtime-container:jre-8-musl
+
+# Install necessary font packages
+RUN apk add --no-cache fontconfig ttf-dejavu
