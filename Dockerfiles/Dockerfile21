@@ -1,4 +1,4 @@
 FROM bellsoft/liberica-runtime-container:jre-21-musl
 
 # Install necessary font packages
-RUN apk add --no-cache fontconfig ttf-dejavu
+RUN apk add --no-cache fontconfig ttf-dejavu eudev eudev-dev eudev-libs
