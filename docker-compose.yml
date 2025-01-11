@@ -7,6 +7,11 @@ services:
       context: . # Build context is the current directory
       dockerfile: Dockerfiles/Dockerfile8 # Name of the dockerfile
     image: liberica-runtime-8 # Sets the image name after build
+  liberica-runtime-11:
+    build:
+      context: . # Build context is the current directory
+      dockerfile: Dockerfiles/Dockerfile11 # Name of the dockerfile
+    image: liberica-runtime-11 # Sets the image name after build
   liberica-runtime-17:
     build:
       context: . # Build context is the current directory
