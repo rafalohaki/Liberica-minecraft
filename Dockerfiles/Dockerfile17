@@ -1,4 +1,4 @@
-FROM bellsoft/liberica-runtime-container:jre-17-musl
+FROM bellsoft/liberica-runtime-container:jre-17-glibc
 
 # Install necessary font packages
 RUN apk add --no-cache fontconfig ttf-dejavu eudev eudev-dev eudev-libs
