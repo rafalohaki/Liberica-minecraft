@@ -11,7 +11,12 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        tag: [8, 11, 17, 21, 23]
+        java_version: [8, 11, 17, 21, 23]
+        libc_type: [ musl, glibc ] # Added glibc tag
+        exclude:
+          - java_version: 8
+            libc_type: glibc # No glibc version of Java 8
+
     steps:
       - uses: actions/checkout@v3
 
@@ -24,10 +29,21 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      - name: Determine Dockerfile and Tag
+        id: docker_vars
+        run: |
+          if [[ "${{ matrix.libc_type }}" == "glibc" ]]; then
+            echo "dockerfile=Dockerfiles/Dockerfile${{ matrix.java_version }}-glibc" >> $GITHUB_OUTPUT
+            echo "tag=${{ matrix.java_version }}-glibc" >> $GITHUB_OUTPUT
+          else
+            echo "dockerfile=Dockerfiles/Dockerfile${{ matrix.java_version }}" >> $GITHUB_OUTPUT
+            echo "tag=${{ matrix.java_version }}-musl" >> $GITHUB_OUTPUT
+          fi
+
       - name: Build and push image
         uses: docker/build-push-action@v4
         with:
           context: .
-          file: Dockerfiles/Dockerfile${{ matrix.tag }}
+          file: ${{ steps.docker_vars.outputs.dockerfile }}
           push: true
-          tags: rafalohaki/liberica-minecraft:${{ matrix.tag }}
+          tags: rafalohaki/liberica-minecraft:${{ steps.docker_vars.outputs.tag }}
