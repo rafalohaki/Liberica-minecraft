@@ -11,16 +11,29 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        java_version: [8, 11, 17, 23]  # List of Java versions (without 21)
-        libc_type: [musl]              # Only build musl for these versions
         include:
-          - java_version: 21            # Add Java 21 with multiple libc types
+          # Java 8, 11, 17: only musl builds
+          - java_version: 8
+            libc_type: musl
+          - java_version: 11
+            libc_type: musl
+          - java_version: 17
+            libc_type: musl
+          # Java 21: glibc, musl, nikmusl, and nikglibc builds
+          - java_version: 21
             libc_type: glibc
           - java_version: 21
             libc_type: musl
           - java_version: 21
             libc_type: nikmusl
           - java_version: 21
+            libc_type: nikglibc
+          # Java 23: musl, nikmusl, and nikglibc builds
+          - java_version: 23
+            libc_type: musl
+          - java_version: 23
+            libc_type: nikmusl
+          - java_version: 23
             libc_type: nikglibc
 
     steps:
