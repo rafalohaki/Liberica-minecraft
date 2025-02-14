@@ -1,4 +1,0 @@
-FROM bellsoft/liberica-native-image-kit-container:jdk-23-nik-24-glibc
-
-# Install necessary font packages
-RUN apk add --no-cache fontconfig ttf-dejavu eudev eudev-dev eudev-libs

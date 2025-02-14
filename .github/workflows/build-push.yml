@@ -26,15 +26,9 @@ jobs:
             libc_type: musl
           - java_version: 21
             libc_type: nikmusl
-          - java_version: 21
-            libc_type: nikglibc
-          # Java 23: musl, nikmusl, and nikglibc builds
+          # Java 23: musl, nikmusl builds
           - java_version: 23
             libc_type: musl
-          - java_version: 23
-            libc_type: nikmusl
-          - java_version: 23
-            libc_type: nikglibc
 
     steps:
       - uses: actions/checkout@v3
