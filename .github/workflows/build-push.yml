@@ -4,21 +4,24 @@ on:
   push:
     branches: [ main ]
   schedule:
-    - cron: '0 0 * * *'
+    - cron: '0 0 * * *'  # Run daily at midnight
 
 jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        java_version: [8, 11, 17, 23 ] # List of Java versions (without 21)
-        libc_type: [ musl ]            # Only build musl for these versions
+        java_version: [8, 11, 17, 23]  # List of Java versions (without 21)
+        libc_type: [musl]              # Only build musl for these versions
         include:
-          - java_version: 21            # Add Java 21 with both libc types
+          - java_version: 21            # Add Java 21 with multiple libc types
             libc_type: glibc
           - java_version: 21
             libc_type: musl
-
+          - java_version: 21
+            libc_type: nikmusl
+          - java_version: 21
+            libc_type: nikglibc
 
     steps:
       - uses: actions/checkout@v3
@@ -35,13 +38,24 @@ jobs:
       - name: Determine Dockerfile and Tag
         id: docker_vars
         run: |
-          if [[ "${{ matrix.libc_type }}" == "glibc" ]]; then
-            echo "dockerfile=Dockerfiles/Dockerfile${{ matrix.java_version }}-glibc" >> $GITHUB_OUTPUT
-            echo "tag=${{ matrix.java_version }}-glibc" >> $GITHUB_OUTPUT
-          else
-            echo "dockerfile=Dockerfiles/Dockerfile${{ matrix.java_version }}" >> $GITHUB_OUTPUT
-            echo "tag=${{ matrix.java_version }}-musl" >> $GITHUB_OUTPUT
-          fi
+          case "${{ matrix.libc_type }}" in
+            glibc)
+              echo "dockerfile=Dockerfiles/Dockerfile${{ matrix.java_version }}-glibc" >> $GITHUB_OUTPUT
+              echo "tag=${{ matrix.java_version }}-glibc" >> $GITHUB_OUTPUT
+              ;;
+            musl)
+              echo "dockerfile=Dockerfiles/Dockerfile${{ matrix.java_version }}" >> $GITHUB_OUTPUT
+              echo "tag=${{ matrix.java_version }}-musl" >> $GITHUB_OUTPUT
+              ;;
+            nikmusl)
+              echo "dockerfile=Dockerfiles/Dockerfile${{ matrix.java_version }}-nikmusl" >> $GITHUB_OUTPUT
+              echo "tag=${{ matrix.java_version }}-nikmusl" >> $GITHUB_OUTPUT
+              ;;
+            nikglibc)
+              echo "dockerfile=Dockerfiles/Dockerfile${{ matrix.java_version }}-nikglibc" >> $GITHUB_OUTPUT
+              echo "tag=${{ matrix.java_version }}-nikglibc" >> $GITHUB_OUTPUT
+              ;;
+          esac
 
       - name: Build and push image
         uses: docker/build-push-action@v4

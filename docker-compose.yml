@@ -27,6 +27,16 @@ services:
       context: . # Build context is the current directory
       dockerfile: Dockerfiles/Dockerfile21-glibc # Name of the dockerfile
     image: liberica-runtime-21-glibc # Sets the image name after build
+  liberica-runtime-21-nikmusl:
+    build:
+      context: . # Build context is the current directory
+      dockerfile: Dockerfiles/Dockerfile21-nikmusl # Name of the dockerfile
+    image: liberica-runtime-21-nikmusl # Sets the image name after build
+  liberica-runtime-21-nikglibc:
+    build:
+      context: . # Build context is the current directory
+      dockerfile: Dockerfiles/Dockerfile21-nikglibc # Name of the dockerfile
+    image: liberica-runtime-21-nikglibc # Sets the image name after build
   liberica-runtime-23:
     build:
       context: . # Build context is the current directory
