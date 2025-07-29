@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        tag: [8, 17, 21, 23]
+        tag: [8, 17, 21, 23, 24]
     steps:
       - uses: actions/checkout@v3
 

@@ -29,6 +29,8 @@ jobs:
           # Java 23: musl, nikmusl builds
           - java_version: 23
             libc_type: musl
+          - java_version: 24
+            libc_type: nikmusl
 
     steps:
       - uses: actions/checkout@v3
