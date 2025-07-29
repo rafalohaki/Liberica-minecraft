@@ -37,3 +37,8 @@ services:
       context: . # Build context is the current directory
       dockerfile: Dockerfiles/Dockerfile23 # Name of the dockerfile
     image: liberica-runtime-23 # Sets the image name after build
+  liberica-runtime-24-nikmusl:
+    build:
+      context: . # Build context is the current directory
+      dockerfile: Dockerfiles/Dockerfile24-nikmusl # Name of the dockerfile
+    image: liberica-runtime-24-nikmusl # Sets the image name after build
