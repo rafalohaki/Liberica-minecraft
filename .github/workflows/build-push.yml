@@ -31,6 +31,8 @@ jobs:
             libc_type: musl
           - java_version: 24
             libc_type: nikmusl
+          - java_version: 24
+            libc_type: musl
 
     steps:
       - uses: actions/checkout@v3
